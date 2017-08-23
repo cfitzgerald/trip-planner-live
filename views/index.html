@@ -10,8 +10,33 @@
     {% include './_day.html' %}
   </div>
 </div>
+
 <script src='/vendor/jquery/dist/jquery.js'></script>
-<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_API_KEY }}&sensor=true"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_API_KEY }}&sensor=false"></script>
 <script src='/public/js/Map.js'></script>
 <script src='/public/js/app.js'></script>
+
+<script>
+  {% autoescape %}
+  var options = {
+    hotels: {{ hotels | json }},
+    restaurants: {{ restaurants | json }},
+    activities: {{ activities | json }},
+  };
+
+  {% for hotel in hotels %}
+    $('#hotel-select').append("<option value='{{ hotel.id }}'>{{ hotel.name }}</option>");
+  {% endfor %}
+
+  {% for restaurant in restaurants %}
+    $('#restaurant-select').append("<option value='{{ restaurant.id }}'>{{ restaurant.name }}</option>");
+  {% endfor %}
+
+  {% for activity in activities %}
+    $('#activity-select').append("<option value='{{ activity.id }}'>{{ activity.name }}</option>");
+  {% endfor %}
+
+  {% endautoescape %}
+</script>
+
 {% endblock %}

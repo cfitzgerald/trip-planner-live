@@ -19,13 +19,13 @@ try {
 catch(ex){
 
 }
-app.use(function(req, res, next){
+
+app.use( (req, res, next) => {
   res.locals.GOOGLE_API_KEY = config.GOOGLE_API_KEY;
   next();
 });
 
-
-app.get('/', (req, res, next)=> {
+app.get('/', (req, res, next) => {
   const options = {
     include: [ Place ]
   }
@@ -35,30 +35,30 @@ app.get('/', (req, res, next)=> {
     Restaurant.findAll(options),
     Activity.findAll(options)
   ])
-  .then(([ hotels, restaurants, activities ])=> {
+  .then(([ hotels, restaurants, activities ]) => {
     res.render('index', { hotels, restaurants, activities });
   })
   .catch(next);
 });
 
-app.use((req, res, next)=> {
+app.use((req, res, next) => {
   const error = new Error('page not found');
   error.status = 404;
   next(error);
 });
 
-app.use((err, req, res, next)=> {
+app.use((err, req, res, next) => {
   res.status(err.status || 500).render('error', { error: err });
 });
 
 const port = process.env.PORT || 3000;
 db.sync()
-  .then(()=> db.seed())
-  .then( result => {
+  .then( () => db.seed())
+  .then( (result) => {
     //console.log(result);
   })
-  .then(()=> {
-    app.listen(port, ()=> {
+  .then( () => {
+    app.listen(port, () => {
       console.log(`listening on port ${port}`);
     });
   });
