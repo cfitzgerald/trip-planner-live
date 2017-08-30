@@ -36,6 +36,59 @@
     $('#activity-select').append("<option value='{{ activity.id }}'>{{ activity.name }}</option>");
   {% endfor %}
 
+  $("#add-hotel").on("click", function(event) {
+    var hotelId = $('#hotel-select').val();
+    // options.hotels.id === selectedHotel
+    var selectedHotel = options.hotels.filter(function(hotel) {
+      return hotel.id === +hotelId;
+    });
+    var hotelHtml = "<li class='list-group-item'>" + selectedHotel[0].name + "<button id='remove-hotel' class='btn btn-warning btn-sm pull-right'>x</button><br clear='both' /></li>";
+    $("#day-hotels").append(hotelHtml);
+  });
+
+  $("#day-hotels").on("click", "#remove-hotel", function(event) {
+    // console.log('remove-hotel this = ', $(this).parent());
+    // console.log('removed -> ', $(this).text());
+    // var hotelData = $(this).data(options.hotels.location);
+    // console.log('hotelData = ', hotelData);
+    $(this).parent().remove();
+  });
+
+  $("#add-restaurant").on("click", function(event) {
+    var restaurantId = $('#restaurant-select').val();
+    var selectedRestaurant = options.restaurants.filter(function(restaurant) {
+      return restaurant.id === +restaurantId;
+    });
+    var restaurantHtml = "<li class='list-group-item'>" + selectedRestaurant[0].name + "<button id='remove-restaurant' class='btn btn-warning btn-sm pull-right'>x</button><br clear='both' /></li>";
+    $("#day-restaurants").append(restaurantHtml);
+  });
+
+  $("#day-restaurants").on("click", "#remove-restaurant", function(event) {
+    $(this).parent().remove();
+  });
+
+  $("#add-activity").on("click", function(event) {
+    var activityId = $('#activity-select').val();
+    var selectedActivity = options.activities.filter(function(activity) {
+      return activity.id === +activityId;
+    });
+    var activityHtml = "<li class='list-group-item'>" + selectedActivity[0].name + "<button id='remove-activity' class='btn btn-warning btn-sm pull-right'>x</button><br clear='both' /></li>";
+    $("#day-activities").append(activityHtml);
+  });
+
+  $("#day-activities").on("click", "#remove-activity", function(event) {
+    $(this).parent().remove();
+  });
+
+  $("#add-day").on("click", function(event) {
+    var dayNumber = $(".nav-tabs > li:last").text();
+    // console.log('dayNumber = ', dayNumber);
+    dayNumber++;
+    // remove .active class from last li
+    $(".nav-tabs > li:last").removeClass("active");
+    $(".nav-tabs").append("<li class='active'><a href='#'>" + dayNumber + "</a></li>");
+  })
+
   {% endautoescape %}
 </script>
 
