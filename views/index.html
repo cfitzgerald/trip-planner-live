@@ -24,6 +24,8 @@
     activities: {{ activities | json }},
   };
 
+  var data = []; // { day1: [{ hotel: , resutaurant: , activities: }
+
   {% for hotel in hotels %}
     $('#hotel-select').append("<option value='{{ hotel.id }}'>{{ hotel.name }}</option>");
   {% endfor %}
@@ -37,11 +39,16 @@
   {% endfor %}
 
   $("#add-hotel").on("click", function(event) {
+    var currentDay = getDay();
+    console.log(currentDay)
     var hotelId = $('#hotel-select').val();
     // options.hotels.id === selectedHotel
     var selectedHotel = options.hotels.filter(function(hotel) {
       return hotel.id === +hotelId;
     });
+
+    data[currentDay] = [];
+    data[currentDay].push(selectedHotel);
     var hotelHtml = "<li class='list-group-item'>" + selectedHotel[0].name + "<button id='remove-hotel' class='btn btn-warning btn-sm pull-right'>x</button><br clear='both' /></li>";
     $("#day-hotels").append(hotelHtml);
   });
@@ -52,9 +59,11 @@
     // var hotelData = $(this).data(options.hotels.location);
     // console.log('hotelData = ', hotelData);
     $(this).parent().remove();
+
   });
 
   $("#add-restaurant").on("click", function(event) {
+    var currentDay = getDay();
     var restaurantId = $('#restaurant-select').val();
     var selectedRestaurant = options.restaurants.filter(function(restaurant) {
       return restaurant.id === +restaurantId;
@@ -68,6 +77,8 @@
   });
 
   $("#add-activity").on("click", function(event) {
+    var currentDay = getDay();
+
     var activityId = $('#activity-select').val();
     var selectedActivity = options.activities.filter(function(activity) {
       return activity.id === +activityId;
@@ -80,14 +91,27 @@
     $(this).parent().remove();
   });
 
+
   $("#add-day").on("click", function(event) {
     var dayNumber = $(".nav-tabs > li:last").text();
-    // console.log('dayNumber = ', dayNumber);
     dayNumber++;
+    data.push("day" + dayNumber)
+
+    // console.log('dayNumber = ', dayNumber);
+
     // remove .active class from last li
     $(".nav-tabs > li:last").removeClass("active");
     $(".nav-tabs").append("<li class='active'><a href='#'>" + dayNumber + "</a></li>");
   })
+
+  function getDay(){
+    return "day" + $(".active").text();
+  }
+
+
+
+
+
 
   {% endautoescape %}
 </script>
